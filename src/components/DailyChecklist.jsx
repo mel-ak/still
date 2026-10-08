@@ -45,6 +45,30 @@ export default function DailyChecklist({
     if (onUpdateWater) onUpdateWater(nextCount);
   };
 
+  const handleToggleMulti = () => {
+    if (!onUpdateBrainFuel) return;
+    onUpdateBrainFuel({
+      ...brainFuel,
+      multivitamin: !brainFuel.multivitamin
+    });
+  };
+
+  const handleToggleFood = (food) => {
+    if (!onUpdateBrainFuel) return;
+    const currentFoods = brainFuel.foods || [];
+    const nextFoods = currentFoods.includes(food)
+      ? currentFoods.filter(f => f !== food)
+      : [...currentFoods, food];
+    onUpdateBrainFuel({
+      ...brainFuel,
+      foods: nextFoods
+    });
+  };
+
+  const hasFuel = brainFuel?.multivitamin || (brainFuel?.foods && brainFuel.foods.length > 0);
+  const fuelCount = (brainFuel?.multivitamin ? 1 : 0) + (brainFuel?.foods?.length || 0);
+  const FOOD_OPTIONS = ['Eggs', 'Banana', 'Nuts', 'Yogurt', 'Greens', 'Citrus'];
+
   return (
     <aside className="panel anchors-panel" aria-label="Daily Anchors">
       <div className="anchors-header">
@@ -112,6 +136,54 @@ export default function DailyChecklist({
               </button>
             );
           })}
+        </div>
+      </div>
+
+      {/* Brain Fuel & Micronutrients (Pillar 5 of the Guide) */}
+      <div className="brain-fuel-section">
+        <div className="brain-fuel-header">
+          <div className="brain-fuel-label">
+            <span>Brain Fuel</span>
+            <span className="brain-fuel-count">
+              {hasFuel ? `${fuelCount} logged` : '0 logged'}
+            </span>
+          </div>
+          <span className="brain-fuel-hint-text">
+            {hasFuel ? "Nourishing clear thinking" : "Multivitamin or 1 nutrient food"}
+          </span>
+        </div>
+
+        <div className="fuel-chips-row" role="group" aria-label="Brain fuel selections">
+          <button
+            type="button"
+            id="btn-fuel-multivitamin"
+            className={`fuel-chip ${brainFuel?.multivitamin ? 'active' : ''}`}
+            onClick={handleToggleMulti}
+            title="Basic multivitamin (taken with morning food)"
+          >
+            <span className="fuel-chip-icon">💊</span>
+            <span>Multivitamin</span>
+          </button>
+
+          {FOOD_OPTIONS.map((food) => {
+            const isSelected = brainFuel?.foods?.includes(food);
+            return (
+              <button
+                key={food}
+                type="button"
+                id={`btn-fuel-${food.toLowerCase()}`}
+                className={`fuel-chip ${isSelected ? 'active' : ''}`}
+                onClick={() => handleToggleFood(food)}
+                title={`Brain fuel: ${food}`}
+              >
+                <span>{food}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="fuel-subnote">
+          <span>Key nutrients: B-Complex · Vitamin D · Magnesium · Iron (no diet overhaul)</span>
         </div>
       </div>
 

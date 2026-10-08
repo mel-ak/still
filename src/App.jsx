@@ -77,6 +77,25 @@ export default function App() {
     localStorage.setItem(`still_water_${todayKey}`, waterGlasses.toString());
   }, [waterGlasses, todayKey]);
 
+  // Brain Fuel State (Pillar 5 of Guide)
+  const defaultBrainFuel = {
+    multivitamin: false,
+    foods: []
+  };
+
+  const [brainFuel, setBrainFuel] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`still_brain_fuel_${todayKey}`);
+      return saved ? JSON.parse(saved) : defaultBrainFuel;
+    } catch (_) {
+      return defaultBrainFuel;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(`still_brain_fuel_${todayKey}`, JSON.stringify(brainFuel));
+  }, [brainFuel, todayKey]);
+
   // Notes & Revisions State
   const [notes, setNotes] = useState(() => {
     return localStorage.getItem(`gentle_focus_notes_${todayKey}`) || '';
@@ -122,6 +141,13 @@ export default function App() {
       if (itemId === 'water') {
         setWaterGlasses(nextVal ? 1 : 0);
       }
+      if (itemId === 'nutrition') {
+        if (!nextVal) {
+          setBrainFuel(defaultBrainFuel);
+        } else if (!brainFuel.multivitamin && (!brainFuel.foods || brainFuel.foods.length === 0)) {
+          setBrainFuel({ multivitamin: true, foods: [] });
+        }
+      }
       return {
         ...prev,
         [itemId]: nextVal
@@ -139,10 +165,22 @@ export default function App() {
     }
   };
 
+  const handleUpdateBrainFuel = (nextFuel) => {
+    setBrainFuel(nextFuel);
+    const hasFuel = nextFuel.multivitamin || (nextFuel.foods && nextFuel.foods.length > 0);
+    if (hasFuel && !checklist.nutrition) {
+      setChecklist(prev => ({ ...prev, nutrition: true }));
+      showToast("Brain fuel logged: steady cognitive clarity.");
+    } else if (!hasFuel && checklist.nutrition) {
+      setChecklist(prev => ({ ...prev, nutrition: false }));
+    }
+  };
+
   const handleResetDay = () => {
     if (window.confirm("Reset today's anchors? (Your notes will be kept)")) {
       setChecklist(defaultChecklist);
       setWaterGlasses(0);
+      setBrainFuel(defaultBrainFuel);
       showToast("Today's anchors reset.");
     }
   };
@@ -222,6 +260,7 @@ export default function App() {
       dateKey: todayKey,
       checklist,
       waterGlasses,
+      brainFuel,
       notes,
       worries,
       totalSessions: localStorage.getItem('gentle_focus_total_sessions') || 0
@@ -273,6 +312,8 @@ export default function App() {
           onToggleCheckItem={handleToggleCheckItem}
           waterGlasses={waterGlasses}
           onUpdateWater={handleUpdateWater}
+          brainFuel={brainFuel}
+          onUpdateBrainFuel={handleUpdateBrainFuel}
           notes={notes}
           onUpdateNotes={setNotes}
           onResetDay={handleResetDay}
