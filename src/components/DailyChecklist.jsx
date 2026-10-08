@@ -5,6 +5,8 @@ export default function DailyChecklist({
   onToggleCheckItem, 
   waterGlasses = 0,
   onUpdateWater,
+  brainFuel = { multivitamin: false, foods: [] },
+  onUpdateBrainFuel,
   notes, 
   onUpdateNotes,
   onResetDay
@@ -45,28 +47,30 @@ export default function DailyChecklist({
     if (onUpdateWater) onUpdateWater(nextCount);
   };
 
+  const safeFuel = brainFuel || { multivitamin: false, foods: [] };
+
   const handleToggleMulti = () => {
     if (!onUpdateBrainFuel) return;
     onUpdateBrainFuel({
-      ...brainFuel,
-      multivitamin: !brainFuel.multivitamin
+      ...safeFuel,
+      multivitamin: !safeFuel.multivitamin
     });
   };
 
   const handleToggleFood = (food) => {
     if (!onUpdateBrainFuel) return;
-    const currentFoods = brainFuel.foods || [];
+    const currentFoods = safeFuel.foods || [];
     const nextFoods = currentFoods.includes(food)
       ? currentFoods.filter(f => f !== food)
       : [...currentFoods, food];
     onUpdateBrainFuel({
-      ...brainFuel,
+      ...safeFuel,
       foods: nextFoods
     });
   };
 
-  const hasFuel = brainFuel?.multivitamin || (brainFuel?.foods && brainFuel.foods.length > 0);
-  const fuelCount = (brainFuel?.multivitamin ? 1 : 0) + (brainFuel?.foods?.length || 0);
+  const hasFuel = safeFuel.multivitamin || (safeFuel.foods && safeFuel.foods.length > 0);
+  const fuelCount = (safeFuel.multivitamin ? 1 : 0) + (safeFuel.foods?.length || 0);
   const FOOD_OPTIONS = ['Eggs', 'Banana', 'Nuts', 'Yogurt', 'Greens', 'Citrus'];
 
   return (
@@ -157,7 +161,7 @@ export default function DailyChecklist({
           <button
             type="button"
             id="btn-fuel-multivitamin"
-            className={`fuel-chip ${brainFuel?.multivitamin ? 'active' : ''}`}
+            className={`fuel-chip ${safeFuel.multivitamin ? 'active' : ''}`}
             onClick={handleToggleMulti}
             title="Basic multivitamin (taken with morning food)"
           >
@@ -166,7 +170,7 @@ export default function DailyChecklist({
           </button>
 
           {FOOD_OPTIONS.map((food) => {
-            const isSelected = brainFuel?.foods?.includes(food);
+            const isSelected = safeFuel.foods?.includes(food);
             return (
               <button
                 key={food}
