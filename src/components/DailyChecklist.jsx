@@ -11,6 +11,7 @@ export default function DailyChecklist({
   notes, 
   onUpdateNotes,
   onOpenRevisions,
+  onOpenRhythm,
   onResetDay
 }) {
   const ANCHORS = [
@@ -91,9 +92,23 @@ export default function DailyChecklist({
             {currentWeek === 1 ? 'Week 1 · Foundation mode' : 'Week 2 · Layering mode'}
           </div>
         </div>
-        <span className={`anchors-count ${isMet ? 'met' : ''}`}>
-          {count} of 5 {isMet ? '· Anchor Met' : '· Aim for 2–3'}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <span className={`anchors-count ${isMet ? 'met' : ''}`}>
+            {count} of 5 {isMet ? '· Anchor Met' : '· Aim for 2–3'}
+          </span>
+          {onOpenRhythm && (
+            <button
+              type="button"
+              id="btn-open-rhythm-pill"
+              className="nav-link-btn"
+              style={{ fontSize: '0.72rem', padding: '0.15rem 0.5rem', border: '1px solid var(--border-hairline)', borderRadius: '9999px', textTransform: 'none', letterSpacing: 'normal' }}
+              onClick={onOpenRhythm}
+              title="Open 7-Day Compassionate Rhythm"
+            >
+              7-Day Rhythm
+            </button>
+          )}
+        </div>
       </div>
 
       <div role="list">

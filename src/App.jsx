@@ -9,6 +9,7 @@ import WorryWindowModal from './components/WorryWindowModal';
 import GuideModal from './components/GuideModal';
 import SleepWindDown from './components/SleepWindDown';
 import RevisionsModal from './components/RevisionsModal';
+import RhythmModal from './components/RhythmModal';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('focus'); // 'focus' | 'sleep'
@@ -125,6 +126,7 @@ export default function App() {
   const [isWorryWindowOpen, setIsWorryWindowOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [isRevisionsOpen, setIsRevisionsOpen] = useState(false);
+  const [isRhythmOpen, setIsRhythmOpen] = useState(false);
   const [currentWeek, setCurrentWeek] = useState(() => {
     try {
       const saved = localStorage.getItem('still_current_week');
@@ -264,6 +266,7 @@ export default function App() {
         setIsWorryWindowOpen(false);
         setIsGuideOpen(false);
         setIsRevisionsOpen(false);
+        setIsRhythmOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -302,6 +305,7 @@ export default function App() {
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenWorryWindow={() => setIsWorryWindowOpen(true)}
         onOpenRevisions={() => setIsRevisionsOpen(true)}
+        onOpenRhythm={() => setIsRhythmOpen(true)}
         worryCount={worries.length}
         currentView={currentView}
         onSelectView={setCurrentView}
@@ -337,6 +341,7 @@ export default function App() {
           notes={notes}
           onUpdateNotes={setNotes}
           onOpenRevisions={() => setIsRevisionsOpen(true)}
+          onOpenRhythm={() => setIsRhythmOpen(true)}
           onResetDay={handleResetDay}
         />
       </main>
@@ -407,6 +412,14 @@ export default function App() {
         currentWeek={currentWeek}
         onSetCurrentWeek={setCurrentWeek}
         onShowToast={showToast}
+      />
+
+      {/* Weekly Rhythm & Insights Modal */}
+      <RhythmModal
+        isOpen={isRhythmOpen}
+        onClose={() => setIsRhythmOpen(false)}
+        totalSessions={parseInt(localStorage.getItem('gentle_focus_total_sessions') || '0', 10)}
+        worryCount={worries.length}
       />
 
       {/* Quiet Toast */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Download, BookOpen, Archive, Menu, X, Sparkles, MoonStar, PenLine } from 'lucide-react';
+import { Sun, Moon, Download, BookOpen, Archive, Menu, X, Sparkles, MoonStar, PenLine, Activity } from 'lucide-react';
 
 export default function Navbar({ 
   theme, 
@@ -7,6 +7,7 @@ export default function Navbar({
   onOpenGuide, 
   onOpenWorryWindow, 
   onOpenRevisions,
+  onOpenRhythm,
   worryCount,
   currentView = 'focus',
   onSelectView,
@@ -107,6 +108,16 @@ export default function Navbar({
           >
             <PenLine size={13} />
             <span>Notebook</span>
+          </button>
+
+          <button 
+            id="btn-open-rhythm-desktop"
+            className="nav-link-btn" 
+            onClick={onOpenRhythm}
+            title="Weekly Rhythm & Insights"
+          >
+            <Activity size={13} />
+            <span>Rhythm</span>
           </button>
 
           <button 
@@ -240,6 +251,18 @@ export default function Navbar({
                 <div className="sheet-item-text">
                   <span className="sheet-item-title">Notes &amp; Revisions</span>
                   <span className="sheet-item-sub">Review past reflections &amp; custom rules</span>
+                </div>
+              </button>
+
+              <button 
+                id="btn-sheet-rhythm"
+                className="sheet-menu-item"
+                onClick={() => { setIsMobileMenuOpen(false); onOpenRhythm(); }}
+              >
+                <div className="sheet-item-icon"><Activity size={16} /></div>
+                <div className="sheet-item-text">
+                  <span className="sheet-item-title">Weekly Rhythm</span>
+                  <span className="sheet-item-sub">7-day compound insights (no streaks)</span>
                 </div>
               </button>
 
