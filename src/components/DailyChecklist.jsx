@@ -7,8 +7,10 @@ export default function DailyChecklist({
   onUpdateWater,
   brainFuel = { multivitamin: false, foods: [] },
   onUpdateBrainFuel,
+  currentWeek = 1,
   notes, 
   onUpdateNotes,
+  onOpenRevisions,
   onResetDay
 }) {
   const ANCHORS = [
@@ -69,6 +71,13 @@ export default function DailyChecklist({
     });
   };
 
+  const handleInsertPrompt = (promptText) => {
+    if (!onUpdateNotes) return;
+    const existing = notes ? notes.trim() : '';
+    const updated = existing ? `${existing}\n${promptText}` : promptText;
+    onUpdateNotes(updated);
+  };
+
   const hasFuel = safeFuel.multivitamin || (safeFuel.foods && safeFuel.foods.length > 0);
   const fuelCount = (safeFuel.multivitamin ? 1 : 0) + (safeFuel.foods?.length || 0);
   const FOOD_OPTIONS = ['Eggs', 'Banana', 'Nuts', 'Yogurt', 'Greens', 'Citrus'];
@@ -76,7 +85,12 @@ export default function DailyChecklist({
   return (
     <aside className="panel anchors-panel" aria-label="Daily Anchors">
       <div className="anchors-header">
-        <h2 className="anchors-title">Daily Anchors</h2>
+        <div>
+          <h2 className="anchors-title">Daily Anchors</h2>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>
+            {currentWeek === 1 ? 'Week 1 · Foundation mode' : 'Week 2 · Layering mode'}
+          </div>
+        </div>
         <span className={`anchors-count ${isMet ? 'met' : ''}`}>
           {count} of 5 {isMet ? '· Anchor Met' : '· Aim for 2–3'}
         </span>
@@ -191,15 +205,58 @@ export default function DailyChecklist({
         </div>
       </div>
 
-      {/* Journal Section */}
+      {/* Journal Section & Living Notebook */}
       <div className="journal-section">
-        <label htmlFor="daily-journal-textarea" className="journal-label">
-          Notes &amp; Adjustments
-        </label>
+        <div className="journal-header-row">
+          <label htmlFor="daily-journal-textarea" className="journal-label">
+            Notes &amp; Adjustments
+          </label>
+          {onOpenRevisions && (
+            <button
+              type="button"
+              id="btn-open-revisions-inline"
+              className="nav-link-btn"
+              style={{ fontSize: '0.74rem', textTransform: 'none', letterSpacing: 'normal' }}
+              onClick={onOpenRevisions}
+              title="Open full notebook and past reflections"
+            >
+              Living Notebook
+            </button>
+          )}
+        </div>
+
+        {/* Quick-Reflection Prompt Chips */}
+        <div className="journal-prompt-chips" role="group" aria-label="Reflection prompts">
+          <button
+            type="button"
+            className="journal-prompt-chip"
+            onClick={() => handleInsertPrompt("• Felt easiest: ")}
+            title="Add 'Felt easiest' prompt"
+          >
+            + Felt easiest
+          </button>
+          <button
+            type="button"
+            className="journal-prompt-chip"
+            onClick={() => handleInsertPrompt("• Needs adjusting: ")}
+            title="Add 'Needs adjusting' prompt"
+          >
+            + Needs adjusting
+          </button>
+          <button
+            type="button"
+            className="journal-prompt-chip"
+            onClick={() => handleInsertPrompt("• Tomorrow's tweak: ")}
+            title="Add 'Tomorrow's tweak' prompt"
+          >
+            + Tomorrow's tweak
+          </button>
+        </div>
+
         <textarea
           id="daily-journal-textarea"
           className="journal-textarea"
-          placeholder="What felt easiest today? What needs adjusting?"
+          placeholder="What felt easiest today? What needs adjusting? Use quick prompts above or write freely..."
           value={notes}
           onChange={(e) => onUpdateNotes(e.target.value)}
         />

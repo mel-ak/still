@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Download, BookOpen, Archive, Menu, X, Sparkles, MoonStar } from 'lucide-react';
+import { Sun, Moon, Download, BookOpen, Archive, Menu, X, Sparkles, MoonStar, PenLine } from 'lucide-react';
 
 export default function Navbar({ 
   theme, 
   onToggleTheme, 
   onOpenGuide, 
   onOpenWorryWindow, 
+  onOpenRevisions,
   worryCount,
   currentView = 'focus',
   onSelectView,
@@ -96,6 +97,16 @@ export default function Navbar({
           >
             <BookOpen size={13} />
             <span>Guide</span>
+          </button>
+
+          <button 
+            id="btn-open-revisions-desktop"
+            className="nav-link-btn" 
+            onClick={onOpenRevisions}
+            title="My Notes & Revisions"
+          >
+            <PenLine size={13} />
+            <span>Notebook</span>
           </button>
 
           <button 
@@ -217,6 +228,18 @@ export default function Navbar({
                 <div className="sheet-item-text">
                   <span className="sheet-item-title">The Reset Guide</span>
                   <span className="sheet-item-sub">5 pillars for clear thinking</span>
+                </div>
+              </button>
+
+              <button 
+                id="btn-sheet-revisions"
+                className="sheet-menu-item"
+                onClick={() => { setIsMobileMenuOpen(false); onOpenRevisions(); }}
+              >
+                <div className="sheet-item-icon"><PenLine size={16} /></div>
+                <div className="sheet-item-text">
+                  <span className="sheet-item-title">Notes &amp; Revisions</span>
+                  <span className="sheet-item-sub">Review past reflections &amp; custom rules</span>
                 </div>
               </button>
 

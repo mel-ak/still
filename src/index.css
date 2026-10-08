@@ -1080,6 +1080,198 @@ body {
   border-color: var(--border-hover);
 }
 
+/* Journal Header & Prompt Chips */
+.journal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.journal-prompt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+
+.journal-prompt-chip {
+  background: transparent;
+  border: 1px dashed var(--border-hairline);
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.journal-prompt-chip:hover {
+  border-color: var(--accent);
+  color: var(--text-main);
+  background: var(--bg-surface-subtle);
+}
+
+/* Revisions & Notebook Modal Tabs */
+.revisions-tab-bar {
+  display: flex;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 3px;
+  margin-bottom: 1.25rem;
+}
+
+.revisions-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.revisions-tab-btn:hover {
+  color: var(--text-main);
+}
+
+.revisions-tab-btn.active {
+  background: var(--bg-surface-hover);
+  color: var(--text-main);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Cadence Pacing Box */
+.cadence-box {
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.cadence-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.cadence-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.cadence-pills-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+@media (max-width: 540px) {
+  .cadence-pills-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cadence-pill {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: all var(--transition);
+}
+
+.cadence-pill:hover {
+  border-color: var(--border-hover);
+}
+
+.cadence-pill.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.cadence-pill-header {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.cadence-pill.active .cadence-pill-header {
+  color: var(--accent);
+}
+
+.cadence-pill-body {
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+
+/* Historical Reflections Timeline */
+.reflections-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.reflection-card {
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+}
+
+.reflection-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+  border-bottom: 1px solid var(--border-hairline);
+  padding-bottom: 0.35rem;
+}
+
+.reflection-date {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.reflection-card-body {
+  font-size: 0.82rem;
+  color: var(--text-main);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+
 /* Clean Modals */
 .modal-overlay {
   position: fixed;

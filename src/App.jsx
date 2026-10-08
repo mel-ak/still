@@ -8,6 +8,7 @@ import BrainDumpModal from './components/BrainDumpModal';
 import WorryWindowModal from './components/WorryWindowModal';
 import GuideModal from './components/GuideModal';
 import SleepWindDown from './components/SleepWindDown';
+import RevisionsModal from './components/RevisionsModal';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('focus'); // 'focus' | 'sleep'
@@ -123,6 +124,20 @@ export default function App() {
   const [isBrainDumpOpen, setIsBrainDumpOpen] = useState(false);
   const [isWorryWindowOpen, setIsWorryWindowOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [isRevisionsOpen, setIsRevisionsOpen] = useState(false);
+  const [currentWeek, setCurrentWeek] = useState(() => {
+    try {
+      const saved = localStorage.getItem('still_current_week');
+      return saved ? parseInt(saved, 10) : 1;
+    } catch (_) {
+      return 1;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('still_current_week', currentWeek.toString());
+  }, [currentWeek]);
+
   const [isTransitionActive, setIsTransitionActive] = useState(false);
   const [completedTaskName, setCompletedTaskName] = useState('');
   const [toastMessage, setToastMessage] = useState('');
@@ -248,6 +263,7 @@ export default function App() {
         setIsBrainDumpOpen(false);
         setIsWorryWindowOpen(false);
         setIsGuideOpen(false);
+        setIsRevisionsOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -258,6 +274,8 @@ export default function App() {
     const exportData = {
       exportedAt: new Date().toISOString(),
       dateKey: todayKey,
+      currentWeek,
+      planRevisions: localStorage.getItem('still_plan_revisions') || '',
       checklist,
       waterGlasses,
       brainFuel,
@@ -283,6 +301,7 @@ export default function App() {
         onToggleTheme={toggleTheme}
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenWorryWindow={() => setIsWorryWindowOpen(true)}
+        onOpenRevisions={() => setIsRevisionsOpen(true)}
         worryCount={worries.length}
         currentView={currentView}
         onSelectView={setCurrentView}
@@ -314,8 +333,10 @@ export default function App() {
           onUpdateWater={handleUpdateWater}
           brainFuel={brainFuel}
           onUpdateBrainFuel={handleUpdateBrainFuel}
+          currentWeek={currentWeek}
           notes={notes}
           onUpdateNotes={setNotes}
+          onOpenRevisions={() => setIsRevisionsOpen(true)}
           onResetDay={handleResetDay}
         />
       </main>
@@ -377,6 +398,15 @@ export default function App() {
       <GuideModal
         isOpen={isGuideOpen}
         onClose={() => setIsGuideOpen(false)}
+      />
+
+      {/* Living Notebook & Revisions Modal */}
+      <RevisionsModal
+        isOpen={isRevisionsOpen}
+        onClose={() => setIsRevisionsOpen(false)}
+        currentWeek={currentWeek}
+        onSetCurrentWeek={setCurrentWeek}
+        onShowToast={showToast}
       />
 
       {/* Quiet Toast */}
